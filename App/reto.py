@@ -291,7 +291,9 @@ def buscarGenero (list1:list, generoBuscado:str):
 
 
 
-#req 6 
+"""
+--------------------------REQUERIMIENTO 6 -----------------------
+"""
 # input:elegir al menos 10 peliculas
 #input:ranking ascendento o descendente
 #inputordenar por vote count o  average
@@ -300,7 +302,72 @@ def buscarGenero (list1:list, generoBuscado:str):
 #out: vote count y vote average de las peliculas que hace parte del ranking
 
 
-# def darRankingGenero (lst1:list, genero:str) :
+def printMenuSortingcriteria():
+    print ("")
+    print("     (1)   Ordenar por vote count")
+    print("     (2)   Ordenar por vote average ")
+
+def printMenuSortingOrder():
+    print ("")
+    print("   (1)   Orden descendente ")
+    print("   (2)   Orden ascendente ")
+
+
+
+
+
+
+def darPeliculasPorGenero (list1:list, generoBuscado:str):
+
+    resultList = []
+#este loop recorre el array importado del csv  y crea un array nuevo con el contenido que cumple el criterio
+    for i in range (0, len(list1), 1):
+        if (list1[i]['genres'] in normalizeCase(generoBuscado)): #case insensitive
+            resultList.append(list1[i])   #se agrega a la lista resultado
+
+
+    print ("Se encontraron", len(resultList), ""  )
+    for j in range (len(resultList)):              
+        print((j, resultList[j]['original_title']))
+    print ("Ingrese un rango (1-3) o los numeros separados por una coma. minimo 10 peliculas" )
+
+    valuesInput=str(input ("Ingrese las peliculas seleccionadas:\n"))
+
+    # operations to turn the values into an array go here
+
+    ValuesFormatted=[]
+
+
+
+    #this is the final list that will be sorted by ranking 
+    filteredResultlist=[]
+
+    for m in range(0, len(ValuesFormatted) ,1):
+        toAdd = int(ValuesFormatted[m])
+        filteredResultlist=resultList[toAdd].append 
+
+    print ("Se seleccionaron ", len(filteredResultlist), "peliculas del genero ", generoBuscado )
+
+    valuesInput1=int (input ("Seleccione el criterio para realizar elranking\n"))
+    printMenuSortingcriteria()
+
+    if int (valuesInput1) == 1:  #vote count
+        ordenarVotecount(filteredResultlist)
+        valuesInput2=int (input ("Seleccione el orden para mostrar el ranking\n"))
+        printMenuSortingOrder()
+        if int(valuesInput2)==1:  #descending
+            sortDescendingOrder(filteredResultlist)
+        elif int(valuesInput2)==2:  #ascending
+            sortAscendingOrder(filteredResultlist)
+
+    elif int (valuesInput1) == 2:  #vote average 
+        ordenarVoteAverage(filteredResultlist)
+        valuesInput3=int (input ("Seleccione el orden para mostrar el ranking\n"))
+        printMenuSortingOrder()
+        if int(valuesInput3)==1:  #descending
+            sortDescendingOrder(filteredResultlist)
+        elif int(valuesInput3)==2:  #ascending
+            sortAscendingOrder(filteredResultlist)
 
 
 
@@ -311,6 +378,17 @@ def buscarGenero (list1:list, generoBuscado:str):
 
 
 
+def ordenarVotecount(inputList:list):
+    pass
+
+def  ordenarVoteAverage(inputList:list):
+    pass
+
+def sortAscendingOrder():
+    pass
+
+def sortDescendingOrder():
+    pass
 
 
 
@@ -409,12 +487,13 @@ def main():
                 
 
             elif int(inputs)==55: #opcion 10
-                cantidad=str(input ("Ingrese el genero a buscar:\n"))
-                buscarGenero (lista1,cantidad)
+                genre=str(input ("Ingrese el genero a buscar:\n"))
+                buscarGenero (lista1,genre)
                 input ("Clic para cotinuar")
 
             elif int(inputs)==66: #opcion 10
-                pass
+                genre=str(input ("Ingrese el genero para generar ranking:\n"))
+                darPeliculasPorGenero(lista1,genre)
 
             
             elif int(inputs)==0: #opcion 0, salir
