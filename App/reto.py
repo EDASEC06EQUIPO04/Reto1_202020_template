@@ -278,7 +278,8 @@ def PromedioPeliculasDirector(lst1: list, lst2:list,  director:str)-> None:
 def buscarMovies (lista2:list,cantidad:int)->None:
         
     print("+++++++++++++++++++++++++++++++++++++++++++++++++++  The Best Movies +++++++++++++++++++++++++++++++++")
-    for i in range (len(lista2)-1,len(lista2)-12-cantidad,-1):
+    
+    for i in range (len(lista2)-1,len(lista2)-1-cantidad,-1):
         print("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
         print(lista2[i],"\n")
     print("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
@@ -342,7 +343,7 @@ def main():
             elif int(inputs[0])==5: #opcion 5
                 lista1=loadCSVFile1("Data/theMoviesdb/MoviesDetailsCleaned-small.csv", lista1)
                 proPeliculas_buenas= PromedioPeliculasBuenas(lista1)
-                print("El  promedio de las peliculas buenas fue de:  " , proPeliculas_buenas ) 
+                print("El  promedio de las peliculas buenas fue de:  " , round(proPeliculas_buenas,2) ) 
                 input ("Clic para cotinuar")
 
             elif int(inputs[0])==6: #opcion 6
@@ -434,7 +435,7 @@ def main():
                 t1_stop = process_time() #tiempo final
                 print("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
                 print("Tiempo de ejecución de metodo de la busqueda ",t1_stop-t1_start," segundos")
-                input ("En construccion....Clic para cotinuar")
+                input ("Clic para cotinuar")
                 print("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
 
             elif int(inputs)==12: #opcion 12
@@ -453,7 +454,7 @@ def main():
                 t1_stop = process_time() #tiempo final
                 print("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
                 print("Tiempo de ejecución de metodo de la busqueda ",t1_stop-t1_start," segundos")
-                input ("En construccion....Clic para cotinuar")
+                input ("Clic para cotinuar")
                 print("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
 
                 
