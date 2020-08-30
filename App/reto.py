@@ -109,10 +109,10 @@ def printMenu():
     print ("")
     print ("")
     print ("REQUERIMIENTO 5 - Conocer un genero")
-    print("     (55) Listar las peliculas de un director")
+    print("     (55) Listar las peliculas de un genero")
     print ("")
     print ("REQUERIMIENTO 6 - ranking por genero")
-    print("     (66) Listar las peliculas de un director")
+    print("     (66) dar ranking de genero")
     print ("")
     
     print("     0- Salir")
@@ -269,9 +269,9 @@ def normalizeCase(caseInput:str):
 
 
 
-def buscarGenero (list1:list, generoBuscado:str):
+def buscarGenero (list1, generoBuscado):
 #definicion variables
-    resultList = []
+    lt.newList= []
     averageVotes=0
     currentNumVotes=0
     totalVotes=0
@@ -289,6 +289,11 @@ def buscarGenero (list1:list, generoBuscado:str):
         print((j, resultList[j]['original_title']))
     print ("se encontraron" , len(resultList) , "del genero especificado \nEl promedio de votos para el genero es ", averageVotes)
 
+
+
+
+def buscarGeneroADT(list1:list, generoBuscado:str):
+    
 
 
 """
