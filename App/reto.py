@@ -20,10 +20,10 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-"""
+ """
 
 """
-Este módulo es una aplicación básica con un menú de opciones para cargar datos, contar elementos, y hacer búsquedas sobre una lista .
+  Este módulo es una aplicación básica con un menú de opciones para cargar datos, contar elementos, y hacer búsquedas sobre una lista .
 """
 
 import config as cf
@@ -35,251 +35,161 @@ from ADT import list as lt
 from DataStructures import listiterator as it
 
 from time import process_time 
-from Sorting import insertionsort  as InsSort
 
-
-def loadCSVFile (file, lst, sep=";")->list:
-    """
-    Carga un archivo csv a una lista
-    Args:
-        file 
-            Archivo de texto del cual se cargaran los datos requeridos.
-        lst :: []
-            Lista a la cual quedaran cargados los elementos despues de la lectura del archivo.
-        sep :: str
-            Separador escodigo para diferenciar a los distintos elementos dentro del archivo.
-    Try:
-        Intenta cargar el archivo CSV a la lista que se le pasa por parametro, si encuentra algun error
-        Borra la lista e informa al usuario
-    Returns: None   
-    """
-    del lst[:]
-    print("Cargando archivo ....")
-    t1_start = process_time() #tiempo inicial
-    dialect = csv.excel()
-    dialect.delimiter=sep
-
-    try:
-        with open(file, encoding="utf-8") as csvfile:
-            spamreader = csv.DictReader(csvfile, dialect=dialect)
-            for row in spamreader: 
-                lst.append(row)
-    except:
-        del lst[:]
-        print("Se presento un error en la carga del archivo")
-    
-    t1_stop = process_time() #tiempo final
-    print("Tiempo de ejecución ",t1_stop-t1_start," segundos")
-
-
-    #for i in range (0,len(lst)-1,1):
-    #    print (lst[i])
-    input ("Ya se cargo el archivo, Clic para continuar")
-    return lst
 
 
 def printMenu():
     """
     Imprime el menu de opciones
     """
-
-    print("\n**************************************************************************************")
-    print("\n Bienvenidos a la consola del RETO 1           ***** EXPLORANDO LAMAGIA DEL CINE *****")
-    print("\n**************************************************************************************")
-    print ("CARGA DE DATOS")
-    print("     (1)  Lab 0 - Cargar Datos de Archivos Large ")
-    print("     (2)  Lab 0 - Cargar Datos de Archivos Small ")
-    print("     (3)  Lab 0 - Cargar cualquier archivo por nombre")
-    print ("")
-    print ("REQUERIMIENTO 2 - Crear Ranking de peliculas")
-    print("     (4)  Lab 2 - Ordenar por Vote Count Ascendente")
-    print("     (5)  Lab 2 - Ordenar por Vote Count Descendente")
-    print("     (6)  Lab 2 - Ordenar por Vote Average Ascendente")
-    print("     (7)  Lab 2 - Ordenar por Vote Average Descendente")
-    print("     (8)  Lab 2 - The Best Movies")
-    print("     (9)  Lab 2 - The Worst Movies")
-    print("     (10) Lab 2 - Shellsort")
-    print("     (11) Lab 2 - Quicksort")
-
-    print ("")
-    print ("REQUERIMIENTO 3 - Conocer un director")
-    print("     (11) Lab 3 - Listar las peliculas de un director")
-    print("     (12) Lab 3 - numero de peliculas del director")
-    print("     (13) Lab 3 - promediode la calificacion de las peliculas del director")
-    print ("")
-    print ("")
-    print ("REQUERIMIENTO 5 - Conocer un genero")
-    print("     (55) Listar las peliculas de un genero")
-    print ("")
-    print ("REQUERIMIENTO 6 - ranking por genero")
-    print("     (66) dar ranking de genero")
-    print ("")
-    
-    print("     0- Salir")
-
-"""   De aqui en adelante  procedimientos para el Lab 0"""
-    
-def peliculasBuenas(lst1: list)-> int:
-    #print(lst1)
-    print("Aqui estoy ")
-    nRegistros= len(lst1)
-    pelBuenas=0
-    for i in range (0, nRegistros, 1):
-        if (float(lst1[i]['vote_average']) >= 6):
-            pelBuenas+=1
-            
-        #print(lst1[i]['vote_average'])
-        #pelBuenas=pelBuenas+ float(lst1[i]['vote_average'])
-    #print(pelBuenas)    
-    #input("Click para continuar")
-    return pelBuenas
-
-def PromedioPeliculasBuenas(lst1: list)-> float:
-    #print(lst1)
-    print("Aqui estoy ")
-    nRegistros= len(lst1)
-    pelBuenas=0
-    proBuenas=0.0
-    for i in range (0, nRegistros, 1):
-        if (float(lst1[i]['vote_average']) >= 6):
-            pelBuenas+=1
-            proBuenas= proBuenas + float(lst1[i]['vote_average'])
-        #print(lst1[i]['vote_average'])
-        #pelBuenas=pelBuenas+ float(lst1[i]['vote_average'])
-    #print(pelBuenas)    
-    #input("Click para continuar")
-    proBuenas=proBuenas/pelBuenas
-    return proBuenas
-
-def peliculasBuenasDirector(lst1: list, lst2:list,  director:str)-> None:
-    #print(lst1)
-    print("Aqui estoy ")
-    nRegistros= len(lst1)
-    pelBuenasDirector=0
-    proBuenas=0.0
-    NuPeliculas=0
-    for i in range (0, nRegistros, 1):
-        if ( lst2[i]['director_name'] == director):
-            NuPeliculas= NuPeliculas+1
-        if (float(lst1[i]['vote_average']) >= 6) and (lst2[i]['director_name'] == director):
-            pelBuenasDirector+=1
-            proBuenas= proBuenas + float(lst1[i]['vote_average'])
-            
-        #print(lst1[i]['vote_average'])
-        #pelBuenas=pelBuenas+ float(lst1[i]['vote_average'])
-    #print(pelBuenas)    
-    #input("Click para continuar")
-    if pelBuenasDirector != 0:
-        proBuenas= proBuenas/pelBuenasDirector
-        respuesta=(pelBuenasDirector, proBuenas)
-    print("El numero de peliculas del director " , director , " son: ", NuPeliculas ,"de las cuales ", pelBuenasDirector, "son buenas. Con un promedio de: ", round(proBuenas,2)) 
-    input ("Clic para cotinuar")
-#  return respuesta
-
-    """   De aqui en adelante debemos desarrollar los procedimientos para el Lab 1"""
+    print("\nBienvenido")
+    print("1- Cargar Datos")
+    print("2- Ranking de peliculas")
+    print("3- Conocer un director")
+    print("4- Conocer un actor")
+    print("5- Entender un genero")
+    print("6- Crear ranking")
+    print("0- Salir")
 
 
-def countElementsFilteredByColumn(criteria, column, lst):
-    """
-    Retorna cuantos elementos coinciden con un criterio para una columna dada  
-    Args:
-        criteria:: str
-            Critero sobre el cual se va a contar la cantidad de apariciones
-        column
-            Columna del arreglo sobre la cual se debe realizar el conteo
-        list
-            Lista en la cual se realizará el conteo, debe estar inicializada
-    Return:
-        counter :: int
-            la cantidad de veces ue aparece un elemento con el criterio definido
-    """
-    if lst['size']==0:
-        print("La lista esta vacía")  
+
+
+def compareRecordIds (recordA, recordB):
+    if int(recordA['id']) == int(recordB['id']):
         return 0
-    else:
-        t1_start = process_time() #tiempo inicial
-        counter=0
-        iterator = it.newIterator(lst)
-        while  it.hasNext(iterator):
-            element = it.next(iterator)
-            if criteria.lower() in element[column].lower(): #filtrar por palabra clave 
-                counter+=1           
-        t1_stop = process_time() #tiempo final
-        print("Tiempo de ejecución ",t1_stop-t1_start," segundos")
-    return counter
-
-def countElementsByCriteria(criteria, column, lst):
-    """
-    Retorna la cantidad de elementos que cumplen con un criterio para una columna dada
-    """
-    return 0
-
-def orderElementsByCriteria(function, column, lst, elements):
-    """
-    Retorna una lista con cierta cantidad de elementos ordenados por el criterio
-    """
-    return 0
-
-def iSort (lst:list, criterio:str, orden:str)->list: 
-    t1_start = process_time() #tiempo inicial
-    input ("Vamos a proceder a ordenar usando el metodo Insertion Sort, esto puede tomar algunos segundos o minutos. Clic para continuar")
-    listaOrdenada = []
-    listaOrdenada=InsSort.insertionSort (lst,criterio, orden)
-    t1_stop = process_time() #tiempo final
-    print("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
-    print("Tiempo de ejecución de metodo InsertionSort ",t1_stop-t1_start," segundos")
-    input ("Dar clic para continuar...")
-    return listaOrdenada
-
-def buscarMovies (lista2:list,cantidad:int)->None:
-    print("+++++++++++++++++++++++++++++++++++++++++++++++++++  The Best Movies +++++++++++++++++++++++++++++++++")
-    for i in range (0,cantidad,1):
-        print("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
-        print(lista2[i],"\n")
-    print("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
-    input ("Dar clic para continuar...")
-
-def buscarMoviesWorst (lista2:list,cantidad:int)->None:
-    print("+++++++++++++++++++++++++++++++++++++++++++++++++++  The Best Movies +++++++++++++++++++++++++++++++++")
-    for i in range (len(lista2)-1,len(lista2)-12-cantidad,-1):
-        print("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
-        print(lista2[i],"\n")
-    print("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
-    input ("Dar clic para continuar...")
+    elif int(recordA['id']) > int(recordB['id']):
+        return 1
+    return -1
 
 
 
+def loadCSVFile (file,cmpfunction):
+    sep=";"
+    #lst = lt.newList("ARRAY_LIST") #Usando implementacion arraylist
+    lst = lt.newList("SINGLE_LINKED") #Usando implementacion linkedlist
+    
+    dialect = csv.excel()
+    dialect.delimiter=sep
+    try:
+        with open(file, encoding="utf-8") as csvfile:
+            spamreader = csv.DictReader(csvfile, dialect=dialect)
+            for row in spamreader: 
+                lt.addLast(lst,row)
+    except:
+        print("Hubo un error con la carga del archivo")
+    
+    return lst
 
 
 
+def loadMoviesDetails ():
+    lst = loadCSVFile("Data/themoviesdb/SmallMoviesDetailsCleaned.csv",compareRecordIds) 
+    print("Datos cargados, " + str(lt.size(lst)) + " elementos cargados")
+    return lst
 
-"""
-------------------REQUERIMIENTO 5 ------------------------
-"""
-#input: nombre del genero buscado
+def loadMoviesCasting ():
+    lst = loadCSVFile("Data/themoviesdb/MoviesCastingRaw-small.csv",compareRecordIds) 
+    print("Datos cargados, " + str(lt.size(lst)) + " elementos cargados")
+    return lst
 
-#out: lista de todas las peliculas asociadas al genero
-#out: cantidad de elementos encontrados
-#out: vote count del genero
 
-#metodo para que el input coincida con el formato en caso que no se introduzca una mayuscula, se deja como metodo aparte para reutilización
 def normalizeCase(caseInput:str):
     return caseInput.title()
     
 
 
 
-def buscarGenero (list1, generoBuscado):
-#definicion variables
-    lt.newList= []
+
+
+
+
+# Req 3
+
+def ConocerTrabajoDirector (lista1, lista2, nom):
+    #variables
+    listaPelis=[]
+    numpeliculas=0
+    proPeliculas=0.0
+#loop
+    for x in range(0, lt.size(lista1)):
+        y=lt.getElement(lista2, x)
+        if (y["director_name"] == normalizeCase(nom)): 
+            listaPelis.append(lt.getElement(lista1, x)["original_title"])
+            numpeliculas += 1 
+            proPeliculas = float(lt.getElement(lista1, x)['vote_average'])
+
+    if numpeliculas != 0:
+
+        promfinal= proPeliculas/numpeliculas
+        print("La lista de peliculas es: ", listaPelis)
+        print("El numero de peliculas dirigidas por el director es: ", numpeliculas)
+        print("El promedio de la calificacion de las peliculas es: ", promfinal)
+
+    else:
+
+        print("Ha ocurrido un error, porfavor escriba el nombre de otro director")
+
+
+
+
+#Req 4
+def ConocerTrabajoActor (lista1, lista2, nom):
+    listaPelis=[]
+    numpeliculas=0
+    proPeliculas=0.0
+    posiblesDirectores={}
+    
+    for x in range(1,  lt.size(lista1)):
+        if lt.getElement(lista2, x)["actor1_name"] == nom or lt.getElement(lista2, x)["actor2_name"] == nom or lt.getElement(lista2, x)["actor3_name"] == nom or lt.getElement(lista2, x)["actor4_name"] == nom or lt.getElement(lista2, x)["actor5_name"] == nom:
+           listaPelis.append(lt.getElement(lista1, x)["original_title"])
+           numpeliculas += 1
+           proPeliculas += float(lt.getElement(lista1, x)['vote_average'])
+
+           nom_direc=lt.getElement(lista2, x)["director_name"]
+           if nom_direc in posiblesDirectores:
+               posiblesDirectores[nom_direc] += 1
+           else:
+               posiblesDirectores[nom_direc] = 1
+
+    
+    
+    if numpeliculas != 0:
+        director=""
+        i=0
+        for x in posiblesDirectores:
+            if posiblesDirectores[x] > i:
+                i=posiblesDirectores[x]
+                director = x
+
+        promfinal= proPeliculas/numpeliculas
+        print("La lista de peliculas es: ", listaPelis)
+        print("El numero de peliculas en las que el actor ha partisipado son: ", numpeliculas)
+        print("El promedio de la calificacion de las peliculas es: ", promfinal)
+        print("El nombre del director con el que actor ha trabajado mas veces es: ", director)
+    else:
+        print("Ha ocurrido un error, porfavor escriba el nombre de otro actor")
+    
+
+
+
+
+
+"""
+-------------------REQUERIMIENTO5-------------
+"""
+
+def buscarGeneroADT(list1, generoBuscado:str):
+    resultList= []
     averageVotes=0
     currentNumVotes=0
     totalVotes=0
+
+
 #este loop recorre el array importado del csv  y crea un array nuevo con el contenido que cumple el criterio
-    for i in range (0, len(list1), 1):
-        if (list1[i]['genres'] in normalizeCase(generoBuscado)): #case insensitive
-            resultList.append(list1[i])   #se agrega a la lista resultado
-            currentNumVotes = int(list1[i]['vote_count'])
+    for i in range (0, lt.size(list1)):
+        if (lt.getElement(list1, i)['genres'] in normalizeCase(generoBuscado)): #case insensitive
+            resultList.append(lt.getElement(list1, i))   #se agrega a la lista resultado
+            currentNumVotes = int(lt.getElement(list1, i)['vote_count'])
             totalVotes= totalVotes + currentNumVotes    
     averageVotes=totalVotes/len(resultList)#calculo del promedio de votos
 
@@ -289,11 +199,6 @@ def buscarGenero (list1, generoBuscado):
         print((j, resultList[j]['original_title']))
     print ("se encontraron" , len(resultList) , "del genero especificado \nEl promedio de votos para el genero es ", averageVotes)
 
-
-
-
-def buscarGeneroADT(list1:list, generoBuscado:str):
-    
 
 
 """
@@ -322,57 +227,6 @@ def printMenuSortingOrder():
 
 
 
-def darPeliculasPorGenero (list1:list, generoBuscado:str):
-
-    resultList = []
-#este loop recorre el array importado del csv  y crea un array nuevo con el contenido que cumple el criterio
-    for i in range (0, len(list1), 1):
-        if (list1[i]['genres'] in normalizeCase(generoBuscado)): #case insensitive
-            resultList.append(list1[i])   #se agrega a la lista resultado
-
-
-    print ("Se encontraron", len(resultList), ""  )
-    for j in range (len(resultList)):              
-        print((j, resultList[j]['original_title']))
-    print ("Ingrese un rango (1-3) o los numeros separados por una coma. minimo 10 peliculas" )
-
-    valuesInput=str(input ("Ingrese las peliculas seleccionadas:\n"))
-
-    # operations to turn the values into an array go here
-
-    ValuesFormatted=[]
-
-
-
-    #this is the final list that will be sorted by ranking 
-    filteredResultlist=[]
-
-    for m in range(0, len(ValuesFormatted) ,1):
-        toAdd = int(ValuesFormatted[m])
-        filteredResultlist=resultList[toAdd].append 
-
-    print ("Se seleccionaron ", len(filteredResultlist), "peliculas del genero ", generoBuscado )
-
-    valuesInput1=int (input ("Seleccione el criterio para realizar elranking\n"))
-    printMenuSortingcriteria()
-
-    if int (valuesInput1) == 1:  #vote count
-        ordenarVotecount(filteredResultlist)
-        valuesInput2=int (input ("Seleccione el orden para mostrar el ranking\n"))
-        printMenuSortingOrder()
-        if int(valuesInput2)==1:  #descending
-            sortDescendingOrder(filteredResultlist)
-        elif int(valuesInput2)==2:  #ascending
-            sortAscendingOrder(filteredResultlist)
-
-    elif int (valuesInput1) == 2:  #vote average 
-        ordenarVoteAverage(filteredResultlist)
-        valuesInput3=int (input ("Seleccione el orden para mostrar el ranking\n"))
-        printMenuSortingOrder()
-        if int(valuesInput3)==1:  #descending
-            sortDescendingOrder(filteredResultlist)
-        elif int(valuesInput3)==2:  #ascending
-            sortAscendingOrder(filteredResultlist)
 
 
 
@@ -383,17 +237,7 @@ def darPeliculasPorGenero (list1:list, generoBuscado:str):
 
 
 
-def ordenarVotecount(inputList:list):
-    pass
 
-def  ordenarVoteAverage(inputList:list):
-    pass
-
-def sortAscendingOrder():
-    pass
-
-def sortDescendingOrder():
-    pass
 
 
 
@@ -409,102 +253,42 @@ def main():
     Args: None
     Return: None 
     """
-    lista1 = []  # se require usar lista definida
-    lista2 = []  # se require usar lista definida
-    lista3 = []   # se require usar lista definida
+
+
     while True:
         printMenu() #imprimir el menu de opciones en consola
-        inputs =input('Seleccione una opción para continuar:  ') #leer opción ingresada
-        print ("Usted selecciono: ", inputs)
+        inputs =input('Seleccione una opción para continuar\n') #leer opción ingresada
         if len(inputs)>0:
-            if int(inputs)==1: #opcion 1
-                lista1=loadCSVFile("Data/theMoviesdb/AllMoviesDetailsCleaned.csv", lista1) 
-                print("Datos cargados de Movies Large, ",len(lista1)," elementos cargados")
-                lista2=loadCSVFile("Data/theMoviesdb/AllMoviesCastingRaw.csv", lista2 ) 
-                print("Datos cargados de Casting Large, ",len(lista2)," elementos cargados")
-                input ("Clic para cotinuar...")
 
-            elif int(inputs)==2: #opcion 2
-                lista1=loadCSVFile("Data/theMoviesdb/SmallMoviesDetailsCleaned.csv", lista1) 
-                print("Datos cargados de Movies Small, ",len(lista1)," elementos cargados")
-                lista2=loadCSVFile("Data/theMoviesdb/MoviesCastingRaw-small.csv", lista2) 
-                print("Datos cargados de Casting Small, ",len(lista2)," elementos cargados")
-                input ("Clic para cotinuar")
-            
-            elif int(inputs)==3: #opcion 3
+            if int(inputs[0])==1: #opcion 1
+                lstmovies = loadMoviesDetails()
+                lstmovcas = loadMoviesCasting()
+                print("datos cargados")
+                #print("Conocer trabajo de un directo: ")
                 
-                input ("Clic para continuar")
-                fileToLoad = input ("Digite el nombre del archivo [ ejemplo: Data/GoodReads/books.csv ] : ")
-                lista1=loadCSVFile(fileToLoad) 
-                print("Datos cargados del archivo [",fileToLoad, " ]: ", len(lista1))
-                
-                input ("Clic para cotinuar")
+                #print("Conocer trabajo actor")
+                #ConocerTrabajoActor(lstmovies, lstmovcas, "Keanu Reeves")
 
-            elif int(inputs)==4: #opcion 4
-                orden="less"
-                criterio='vote_count'
-                #print (lista1)
-                #input ("Clic para avanzar")
-                lista3=iSort (lista1,criterio, orden)
-                print  ("Se ha ordenado la lista")
+            elif int(inputs[0])==2: #opcion 2
+                pass
 
-            elif int(inputs)==5: #opcion 5
-                orden="greater"
-                criterio='vote_count'
-                #print (lista1)
-                #input ("Clic para avanzar")
-                lista3=iSort (lista1,criterio, orden)
-                print  ("Se ha ordenado la lista")
-            elif int(inputs)==6: #opcion 6
-                orden="less"
-                criterio='vote_average'
-                #print (lista1)
-                #input ("Clic para avanzar")
-                lista3=iSort (lista1,criterio, orden)
-                print  ("Se ha ordenado la lista")
-            elif int(inputs)==7: #opcion 7 
-                orden="greater"
-                criterio='vote_average'
-                #print (lista1)
-                #input ("Clic para avanzar")
-                lista3=iSort (lista1,criterio, orden)
-                print  ("Se ha ordenado la lista")               
-                input ("En construccion....Clic para cotinuar")
-            elif int(inputs)==8: #opcion 8
-                
-                cantidad=int(input ("Digite el numero de pelicuales que dea lisar:"))
-                buscarMovies (lista1,cantidad)
-                input ("En construccion....Clic para cotinuar")
+            elif int(inputs[0])==3: #opcion 3
+                director=str(input ("Ingrese el director a buscar:\n"))
+                ConocerTrabajoDirector(lstmovies, lstmovcas, director)
 
-            elif int(inputs)==9: #opcion 9
-                cantidad=int(input ("Digite el numero de pelicuales que dea lisar:"))
-                buscarMoviesWorst (lista1,cantidad)
-                input ("En construccion....Clic para cotinuar")
-            elif int(inputs)==10: #opcion 10
-                input ("En construccion....Clic para cotinuar")
-            elif int(inputs)==11: #opcion 11
-                input ("En construccion....Clic para cotinuar")            
-            elif int(inputs)==12: #opcion 12
-                input ("En construccion....Clic para cotinuar")           
-            elif int(inputs)==13: #opcion 13
-                input ("En construccion....Clic para cotinuar")     
+            elif int(inputs[0])==4: #opcion 4
+                pass
 
-                
+            elif int(inputs[0])==5: #opcion 5
+                genero=str(input ("Ingrese el genero a buscar:\n"))
+                buscarGeneroADT(lstmovies, genero)
 
-            elif int(inputs)==55: #opcion 10
-                genre=str(input ("Ingrese el genero a buscar:\n"))
-                buscarGenero (lista1,genre)
-                input ("Clic para cotinuar")
+            elif int(inputs[0])==6: #opcion 6
+                pass
 
-            elif int(inputs)==66: #opcion 10
-                genre=str(input ("Ingrese el genero para generar ranking:\n"))
-                darPeliculasPorGenero(lista1,genre)
 
-            
-            elif int(inputs)==0: #opcion 0, salir
-                sys.exit(0)  
-
-            
+            elif int(inputs[0])==0: #opcion 0, salir
+                sys.exit(0)
                 
 if __name__ == "__main__":
     main()

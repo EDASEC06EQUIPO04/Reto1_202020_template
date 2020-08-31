@@ -63,21 +63,26 @@ def compareRecordIds (recordA, recordB):
 
 
 
-def loadCSVFile (file, cmpfunction):
-    lst=lt.newList("ARRAY_LIST", cmpfunction)
+def loadCSVFile (file,cmpfunction):
+    sep=";"
+    #lst = lt.newList("ARRAY_LIST") #Usando implementacion arraylist
+    lst = lt.newList("SINGLE_LINKED") #Usando implementacion linkedlist
+    
     dialect = csv.excel()
-    dialect.delimiter=";"
+    dialect.delimiter=sep
     try:
-        with open(  cf.data_dir + file, encoding="utf-8") as csvfile:
-            row = csv.DictReader(csvfile, dialect=dialect)
-            for elemento in row: 
-                lt.addLast(lst,elemento)
+        with open(file, encoding="utf-8") as csvfile:
+            spamreader = csv.DictReader(csvfile, dialect=dialect)
+            for row in spamreader: 
+                lt.addLast(lst,row)
     except:
         print("Hubo un error con la carga del archivo")
+    
     return lst
 
 
-def loadMovies ():
+
+def loadMoviesDetails ():
     lst = loadCSVFile("Data/themoviesdb/SmallMoviesDetailsCleaned.csv",compareRecordIds) 
     print("Datos cargados, " + str(lt.size(lst)) + " elementos cargados")
     return lst
@@ -88,11 +93,15 @@ def loadMoviesCasting ():
     return lst
 
 
+def normalizeCase(caseInput:str):
+    return caseInput.title()
+    
 
 
-"""
-------------------------------REQUERIMIENTO 3 -----------
-"""
+
+
+
+
 
 # Req 3
 
@@ -123,92 +132,43 @@ def ConocerTrabajoDirector (lista1, lista2, nom):
 
 
 
-
-
-
-
-
-
-
-
-
-"""
-------------------REQUERIMIENTO 5 ------------------------
-"""
-#input: nombre del genero buscado
-
-#out: lista de todas las peliculas asociadas al genero
-#out: cantidad de elementos encontrados
-#out: vote count del genero
-
-#metodo para que el input coincida con el formato en caso que no se introduzca una mayuscula, se deja como metodo aparte para reutilización
-def normalizeCase(caseInput:str):
-    return caseInput.title()
+#Req 4
+def ConocerTrabajoActor (lista1, lista2, nom):
+    listaPelis=[]
+    numpeliculas=0
+    proPeliculas=0.0
+    posiblesDirectores={}
     
+    for x in range(1,  lt.size(lista1)):
+        if lt.getElement(lista2, x)["actor1_name"] == nom or lt.getElement(lista2, x)["actor2_name"] == nom or lt.getElement(lista2, x)["actor3_name"] == nom or lt.getElement(lista2, x)["actor4_name"] == nom or lt.getElement(lista2, x)["actor5_name"] == nom:
+           listaPelis.append(lt.getElement(lista1, x)["original_title"])
+           numpeliculas += 1
+           proPeliculas += float(lt.getElement(lista1, x)['vote_average'])
 
+           nom_direc=lt.getElement(lista2, x)["director_name"]
+           if nom_direc in posiblesDirectores:
+               posiblesDirectores[nom_direc] += 1
+           else:
+               posiblesDirectores[nom_direc] = 1
 
-def buscarGeneroADT(list1, generoBuscado:str):
-    resultList= []
-    averageVotes=0
-    currentNumVotes=0
-    totalVotes=0
+    
+    
+    if numpeliculas != 0:
+        director=""
+        i=0
+        for x in posiblesDirectores:
+            if posiblesDirectores[x] > i:
+                i=posiblesDirectores[x]
+                director = x
 
-
-#este loop recorre el array importado del csv  y crea un array nuevo con el contenido que cumple el criterio
-    for i in range (0, lt.size(list1)):
-        if (lt.getElement(list1, i)['genres'] in normalizeCase(generoBuscado)): #case insensitive
-            resultList.append(lt.getElement(list1, i))   #se agrega a la lista resultado
-            currentNumVotes = int(lt.getElement(list1, i)['vote_count'])
-            totalVotes= totalVotes + currentNumVotes    
-    averageVotes=totalVotes/len(resultList)#calculo del promedio de votos
-
-
-    print ("Las peliculas encontradas son:" )
-    for j in range (len(resultList)):               #loop para imprimir todos los titulos encontrados con un indice
-        print((j, resultList[j]['original_title']))
-    print ("se encontraron" , len(resultList) , "del genero especificado \nEl promedio de votos para el genero es ", averageVotes)
-
-
-
-"""
---------------------------REQUERIMIENTO 6 -----------------------
-"""
-# input:elegir al menos 10 peliculas
-#input:ranking ascendento o descendente
-#inputordenar por vote count o  average
-
-#out:lista de peliculas que hacen pare del ranking
-#out: vote count y vote average de las peliculas que hace parte del ranking
-
-
-def printMenuSortingcriteria():
-    print ("")
-    print("     (1)   Ordenar por vote count")
-    print("     (2)   Ordenar por vote average ")
-
-def printMenuSortingOrder():
-    print ("")
-    print("   (1)   Orden descendente ")
-    print("   (2)   Orden ascendente ")
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        promfinal= proPeliculas/numpeliculas
+        print("La lista de peliculas es: ", listaPelis)
+        print("El numero de peliculas en las que el actor ha partisipado son: ", numpeliculas)
+        print("El promedio de la calificacion de las peliculas es: ", promfinal)
+        print("El nombre del director con el que actor ha trabajado mas veces es: ", director)
+    else:
+        print("Ha ocurrido un error, porfavor escriba el nombre de otro actor")
+    
 
 def main():
     """
@@ -225,28 +185,30 @@ def main():
         inputs =input('Seleccione una opción para continuar\n') #leer opción ingresada
         if len(inputs)>0:
 
-            if int(inputs)==1: #opcion 1
-                lstmovies = loadMovies()
+            if int(inputs[0])==1: #opcion 1
+                lstmovies = loadMoviesDetails()
                 lstmovcas = loadMoviesCasting()
+                print("datos cargados")
+                #print("Conocer trabajo de un directo: ")
+                
+                #print("Conocer trabajo actor")
+                #ConocerTrabajoActor(lstmovies, lstmovcas, "Keanu Reeves")
 
-            elif int(inputs)==2: #opcion 2
+            elif int(inputs[0])==2: #opcion 2
                 pass
 
-            elif int(inputs)==3: #opcion 3
+            elif int(inputs[0])==3: #opcion 3
                 director=str(input ("Ingrese el director a buscar:\n"))
                 ConocerTrabajoDirector(lstmovies, lstmovcas, director)
 
             elif int(inputs[0])==4: #opcion 4
                 pass
 
-            elif int(inputs)==5: #opcion 5
-                genre=str(input ("Ingrese el genero a buscar:\n"))
-                buscarGeneroADT (lstmovies,genre)
-                input ("Clic para cotinuar")
+            elif int(inputs[0])==5: #opcion 5
+                pass
 
-            elif int(inputs)==6: #opcion 6
-                genre=str(input ("Ingrese el genero para generar ranking:\n"))
-                darPeliculasPorGenero(lstmovies,genre)
+            elif int(inputs[0])==6: #opcion 6
+                pass
 
 
             elif int(inputs[0])==0: #opcion 0, salir
@@ -254,3 +216,5 @@ def main():
                 
 if __name__ == "__main__":
     main()
+
+
