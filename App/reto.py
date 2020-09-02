@@ -1,31 +1,3 @@
-"""
- * Copyright 2020, Departamento de sistemas y Computación, Universidad de Los Andes
- * 
- * Contribución de:
- *
- * Cristian Camilo Castellanos
- *
- * Desarrolado para el curso ISIS1225 - Estructuras de Datos y Algoritmos
- *
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- """
-
-"""
-  Este módulo es una aplicación básica con un menú de opciones para cargar datos, contar elementos, y hacer búsquedas sobre una lista .
-"""
-
 import config as cf
 import sys
 import csv
@@ -35,8 +7,14 @@ import re
 
 from ADT import list as lt
 from DataStructures import listiterator as it
+
 from Sorting import insertionsort as insertion
 
+
+#from Sorting.insertionsort import lessfunction
+from Sorting import insertionsort  as InsSort
+from Sorting import shellsort as shell
+from Sorting import selectionsort as seSort
 from time import process_time 
 from itertools import chain
 from operator import itemgetter
@@ -44,6 +22,7 @@ from operator import itemgetter
 
 
 def printMenu():
+
 
     print ("CARGA DE DATOS")
     print("     (1)  Cargar archivos ")
@@ -68,6 +47,55 @@ def printMenu():
     print("")
     print("     0- Salir")
 
+    print("\n**************************************************************************************")
+    print("\n Bienvenidos a la consola del RETO 1           ***** EXPLORANDO LAMAGIA DEL CINE *****")
+    print("\n**************************************************************************************")
+    print ("CARGA DE DATOS")
+    print("     (1)  Cargar Datos de Archivos Large ")
+    print("     (2)  Cargar Datos de Archivos Small ")
+    print("     (3)  Cargar cualquier archivo por nombre")
+    print ("")
+    print ("REQUERIMIENTO 1 - Crear Ranking de peliculas")
+    print("     (4)  Consultar numero de peliculas buenas (vote_average>=6)")
+    print("     (5)  Cacular el promedio de la votacion")
+    print("     (6)  Consultar buenas peliculas por director")
+    print ("")
+    print ("REQUERIMIENTO 2 - Crear Ranking de peliculas")
+    print("     (7)  Ordenar por Vote Count Ascendente")
+    print("     (8)  Ordenar por Vote Count Descendente")
+    print("     (9)  Ordenar por Vote Average Ascendente")
+    print("     (10) Ordenar por Vote Average Descendente")
+    print("     (11) The Best Movies")
+    print("     (12) The Worst Movies")
+    # print("     (13) Shell sort")
+    #print("     (14) Selection Sort")
+
+    print ("")
+    print ("REQUERIMIENTO 3 - Conocer un director")
+    print("     (15) Listar las peliculas de un director")
+    print("     (16) Numero de peliculas del director")
+    print("     (17) Promedio de la calificacion de las peliculas del director")
+    print ("")
+
+    print ("REQUERIMIENTO 4 - Información de un actor")
+    print("     (18) Listar las peliculas de un actor")
+    print("     (19) numero de peliculas en las que ha participado")
+    print("     (20) Nombre del director con el que mas colaboraciones ha tenido")
+    print("     (21) Cantidad de películas en las que ha participado")    
+    print ("") 
+    print ("REQUERIMIENTO 5 - Entender un género cinematográfico")
+    print("     (22) lista de todas las películas asociadas al género")
+    print("     (23) La cantidad de películas encontradas")
+    print("     (24) El promedio de votos (vote_count) del género")  
+    print ("") 
+    print ("REQUERIMIENTO 6 - Crear ranking del género")
+    print("     (25) Lista de las películas que hacen parte del ranking ")
+    print("     (26) El promedio de votos y calificación (vote_count) películas que hacen parte del ranking.")
+    print("     (27) El promedio de votos y calificación (vote_average) dpelículas que hacen parte del ranking.")  
+    print ("") 
+    print("     0- Salir")
+
+"""   De aqui en adelante  procedimientos para el Lab 0"""
 
 
 
@@ -80,11 +108,13 @@ def compareRecordIds (recordA, recordB):
 
 
 
+
 def loadCSVFile (file,cmpfunction):
     sep=";"
     #lst = lt.newList("ARRAY_LIST") #Usando implementacion arraylist
     lst = lt.newList("SINGLE_LINKED") #Usando implementacion linkedlist
     
+
     dialect = csv.excel()
     dialect.delimiter=sep
     try:
@@ -104,6 +134,7 @@ def loadMoviesDetails ():
     print("Datos cargados, " + str(lt.size(lst)) + " elementos cargados")
     return lst
 
+
 def loadMoviesCasting ():
     lst = loadCSVFile("Data/themoviesdb/MoviesCastingRaw-small.csv",compareRecordIds) 
     print("Datos cargados, " + str(lt.size(lst)) + " elementos cargados")
@@ -121,6 +152,7 @@ def normalizeCase(caseInput:str):
 
 #Metodo alternativo de load file implementado para coincidir con los parametros construidos en el metodo del req 2
 def loadCSVFile1 (file, lst, sep=";")->list:
+
 
     del lst[:]
     print("Cargando archivo ....")
@@ -140,6 +172,7 @@ def loadCSVFile1 (file, lst, sep=";")->list:
     t1_stop = process_time() #tiempo final
     print("Tiempo de ejecución ",t1_stop-t1_start," segundos")
     return lst
+
 
 
 
@@ -459,12 +492,21 @@ def main():
     Args: None
     Return: None 
     """
-
-
+    lista1 = []  # se require usar lista definida peliculas
+    lista2 = []  # se require usar lista definida directores casting
+    lista3 = []   # se require usar lista definida books
     while True:
         printMenu() #imprimir el menu de opciones en consola
-        inputs =input('Seleccione una opción para continuar\n') #leer opción ingresada
+        inputs =input('Seleccione una opción para continuar ?  ') #leer opción ingresada
+        print ("Usted selecciono: ", inputs)
         if len(inputs)>0:
+            if int(inputs)==1: #opcion 1
+                lista1=loadCSVFile1("Data/theMoviesdb/MoviesDetailsCleaned-large.csv", lista1) 
+                print("Datos cargados de Movies Large, ",len(lista1)," elementos cargados")
+                lista2=loadCSVFile1("Data/theMoviesdb/MoviesCastingRaw-large.csv", lista2 ) 
+                print("Datos cargados de Casting Large, ",len(lista2)," elementos cargados")
+                input ("Clic para cotinuar...")
+
 
             if int(inputs[0])==1: #opcion 1
                 lstmovies = loadMoviesDetails()  #lista1
@@ -499,8 +541,11 @@ def main():
                 rankingPorGenero(lstmovies, genero)
 
 
-            elif int(inputs[0])==0: #opcion 0, salir
-                sys.exit(0)
+               input (" Estamos en constuccion.....Clic para cotinuar")         
+            
+            elif int(inputs)==0: #opcion 0, salir
+                sys.exit(0)  
+
                 
 if __name__ == "__main__":
     main()
