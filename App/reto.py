@@ -47,16 +47,22 @@ def printMenu():
 
     print ("CARGA DE DATOS")
     print("     (1)  Cargar archivos ")
+    print("")
     print ("REQUERIMIENTO 1 - Crear Ranking de peliculas")
     print("     (2)  Consultar buenas peliculas")
+    print("")
     print ("REQUERIMIENTO 2 - Crear Ranking de peliculas")
     print("     (3)  Ordenar por Vote Count Ascendente")
+    print("")
     print ("REQUERIMIENTO 3 - Conocer un director")
     print("     (4) Información sobre el trabajo de un director")
+    print("")
     print ("REQUERIMIENTO 4 - Información de un actor")
     print("     (5) Información sobre el trabajo de un director")  
+    print("")
     print ("REQUERIMIENTO 5 - Entender un género cinematográfico")
     print("     (6) películas asociadas al género") 
+    print("")
     print ("REQUERIMIENTO 6 - Crear ranking del género")
     print("     (7) ranking de genero ")
     print("")
@@ -165,7 +171,7 @@ def EncontrarPeliculasBuenasDirector(lst1, lst2, nom_director):
     proBuenas=proBuenas/pelBuenas
     print("El numero de peliculas buenas del director son: ", pelBuenas)
     print("El promedio de las peliculas buenas del director son: ", round(proBuenas, 2))
-
+    input ("presione una tecla para volver al menu...")
 
 """
 -----------------------------------REQUERIMIENTO 2-----------------------------------------
@@ -202,7 +208,9 @@ def crearRankingPeliculas(lst, amount):
 
     listaResults= insertion.insertionSort2(peliculasSeleccionadas,criterio,orden)
 
-    print(listaResults)
+    for n in range(len(listaResults)):
+            print((n+1, listaResults[n]['original_title'], listaResults[n][criterio]))
+    input ("presione una tecla para volver al menu...")
 
 
 
@@ -246,7 +254,7 @@ def ConocerTrabajoDirector (lista1, lista2, nom):
     else:
 
         print("Ha ocurrido un error, porfavor escriba el nombre de otro director")
-
+    input ("presione una tecla para volver al menu...")
 
 """
 ----------------------------REQUERIMIENTO 4---------------------------------------------------------------------
@@ -287,7 +295,7 @@ def ConocerTrabajoActor (lista1, lista2, nom):
         print("El nombre del director con el que actor ha trabajado mas veces es: ", director)
     else:
         print("Ha ocurrido un error, porfavor escriba el nombre de otro actor")
-
+    input ("presione una tecla para volver al menu...")
 
 
 
@@ -315,7 +323,7 @@ def buscarGeneroADT(list1, generoBuscado:str):
     for j in range (lt.size(resultList)):               #loop para imprimir todos los titulos encontrados con un indice
         print((j, (lt.getElement(resultList,j))['original_title']))
     print ("se encontraron" , lt.size(resultList) , "del genero especificado \nEl promedio de votos para el genero es ", averageVotes)
-
+    input ("presione una tecla para volver al menu...")
 
 
 """

@@ -70,15 +70,11 @@ def insertionSort2 (lst, criterio, orden):
    
 
     if (orden == "less"):
-            for i  in range (0,len(lst),1):
-                print (lst[i][criterio])
-            print ("Se ordeno ascendentemente")
+            print ("Se ordeno Descendentemente")
             input ("Se finalizo el proceso...")
     if (orden=="greater"):
             #input ("estoy aqui")
-            for i  in range (1,len(lst),1):
-                print (lst[len(lst)-i][criterio])
-            print ("Se ordeno Descendentemente")
+            print ("Se ordeno ascendentemente")
             input ("Se finalizo el proceso...")
 
     if criterio=='vote_average':
@@ -96,20 +92,6 @@ def insertionSort2 (lst, criterio, orden):
                 position = position-1
                 #print (currentvalue)
             lst[position]=original
-
-
-
-    if (orden == "less"):
-            for i  in range (0,len(lst),1):
-                print (lst[i][criterio])
-            print ("Se ordeno ascendentemente")
-            input ("Se finalizo el proceso...")
-    if (orden=="greater"):
-            #input ("estoy aqui")
-            for i  in range (1,len(lst),1):
-                print (lst[len(lst)-i][criterio])
-            print ("Se ordeno Descendentemente")
-            input ("Se finalizo el proceso...")
 
     return lst
 
