@@ -30,11 +30,16 @@ import config as cf
 import sys
 import csv
 import unicodedata
+import re
+
 
 from ADT import list as lt
 from DataStructures import listiterator as it
+from Sorting import insertionsort as insertion
 
 from time import process_time 
+from itertools import chain
+from operator import itemgetter
 
 
 
@@ -44,11 +49,12 @@ def printMenu():
     """
     print("\nBienvenido")
     print("1- Cargar Datos")
-    print("2- Ranking de peliculas")
-    print("3- Conocer un director")
-    print("4- Conocer un actor")
-    print("5- Entender un genero")
-    print("6- Crear ranking")
+    print("2- encontrar buenas peliculas")
+    print("3- Ranking de peliculas")
+    print("4- Conocer un director")
+    print("5- Conocer un actor")
+    print("6- Entender un genero")
+    print("7- Crear ranking")
     print("0- Salir")
 
 
@@ -103,7 +109,44 @@ def normalizeCase(caseInput:str):
 
 
 
-# Req 3
+"""
+-----------------------------------REQUERIMIENTO 1-----------------------------------------
+"""
+#
+
+def peliculasBuenas(lst1):
+    #print(lst1)
+    nRegistros= lt.size(lst1)
+    pelBuenas=0
+    for i in range (0, nRegistros, 1):
+        if (float(lst1[i]['vote_average']) >= 6):
+            pelBuenas+=1
+            
+
+
+"""
+-----------------------------------REQUERIMIENTO 2-----------------------------------------
+"""
+def PromedioPeliculasBuenas(lst1)
+    #print(lst1)
+    nRegistros= lt.size(lst1)
+    pelBuenas=0
+    proBuenas=0.0
+    for i in range (0, nRegistros, 1):
+        if (float(float(lt.getElement(lst,i))['vote_average']) >= 6):
+            pelBuenas+=1
+            proBuenas= proBuenas + float(lst1[i]['vote_average'])
+        #print(lst1[i]['vote_average'])
+        #pelBuenas=pelBuenas+ float(lst1[i]['vote_average'])
+    #print(pelBuenas)    
+    #input("Click para continuar")
+    proBuenas=proBuenas/pelBuenas
+    return proBuenas
+
+
+"""
+-----------------------------------REQUERIMIENTO 3-----------------------------------------
+"""
 
 def ConocerTrabajoDirector (lista1, lista2, nom):
     #variables
@@ -130,7 +173,9 @@ def ConocerTrabajoDirector (lista1, lista2, nom):
         print("Ha ocurrido un error, porfavor escriba el nombre de otro director")
 
 
-
+"""
+----------------------------REQUERIMIENTO 4---------------------------------------------------------------------
+"""
 
 #Req 4
 def ConocerTrabajoActor (lista1, lista2, nom):
@@ -141,15 +186,15 @@ def ConocerTrabajoActor (lista1, lista2, nom):
     
     for x in range(1,  lt.size(lista1)):
         if lt.getElement(lista2, x)["actor1_name"] == nom or lt.getElement(lista2, x)["actor2_name"] == nom or lt.getElement(lista2, x)["actor3_name"] == nom or lt.getElement(lista2, x)["actor4_name"] == nom or lt.getElement(lista2, x)["actor5_name"] == nom:
-           listaPelis.append(lt.getElement(lista1, x)["original_title"])
-           numpeliculas += 1
-           proPeliculas += float(lt.getElement(lista1, x)['vote_average'])
+            listaPelis.append(lt.getElement(lista1, x)["original_title"])
+            numpeliculas += 1
+            proPeliculas += float(lt.getElement(lista1, x)['vote_average'])
 
-           nom_direc=lt.getElement(lista2, x)["director_name"]
-           if nom_direc in posiblesDirectores:
-               posiblesDirectores[nom_direc] += 1
-           else:
-               posiblesDirectores[nom_direc] = 1
+            nom_direc=lt.getElement(lista2, x)["director_name"]
+            if nom_direc in posiblesDirectores:
+                posiblesDirectores[nom_direc] += 1
+            else:
+                posiblesDirectores[nom_direc] = 1
 
     
     
@@ -175,11 +220,11 @@ def ConocerTrabajoActor (lista1, lista2, nom):
 
 
 """
--------------------REQUERIMIENTO5-------------
+-------------------REQUERIMIENTO 5-----------------------------------------------
 """
 
 def buscarGeneroADT(list1, generoBuscado:str):
-    resultList= []
+    resultList= lt.newList()
     averageVotes=0
     currentNumVotes=0
     totalVotes=0
@@ -188,21 +233,21 @@ def buscarGeneroADT(list1, generoBuscado:str):
 #este loop recorre el array importado del csv  y crea un array nuevo con el contenido que cumple el criterio
     for i in range (0, lt.size(list1)):
         if (lt.getElement(list1, i)['genres'] in normalizeCase(generoBuscado)): #case insensitive
-            resultList.append(lt.getElement(list1, i))   #se agrega a la lista resultado
+            lt.addLast(resultList, (lt.getElement(list1, i)))   #se agrega a la lista resultado
             currentNumVotes = int(lt.getElement(list1, i)['vote_count'])
             totalVotes= totalVotes + currentNumVotes    
-    averageVotes=totalVotes/len(resultList)#calculo del promedio de votos
+    averageVotes=totalVotes/lt.size(resultList)#calculo del promedio de votos
 
 
     print ("Las peliculas encontradas son:" )
-    for j in range (len(resultList)):               #loop para imprimir todos los titulos encontrados con un indice
-        print((j, resultList[j]['original_title']))
-    print ("se encontraron" , len(resultList) , "del genero especificado \nEl promedio de votos para el genero es ", averageVotes)
+    for j in range (lt.size(resultList)):               #loop para imprimir todos los titulos encontrados con un indice
+        print((j, (lt.getElement(resultList,j))['original_title']))
+    print ("se encontraron" , lt.size(resultList) , "del genero especificado \nEl promedio de votos para el genero es ", averageVotes)
 
 
 
 """
---------------------------REQUERIMIENTO 6 -----------------------
+--------------------------REQUERIMIENTO 6 ----------------------------------------
 """
 # input:elegir al menos 10 peliculas
 #input:ranking ascendento o descendente
@@ -210,6 +255,78 @@ def buscarGeneroADT(list1, generoBuscado:str):
 
 #out:lista de peliculas que hacen pare del ranking
 #out: vote count y vote average de las peliculas que hace parte del ranking
+
+
+def rankingPorGenero (list1, generoBuscado:str):
+
+#generate list by given genre
+    resultList2= lt.newList()
+    averageVotes=0
+    currentNumVotes=0
+    totalVotes=0
+
+
+#este loop recorre el array importado del csv  y crea un array nuevo con el contenido que cumple el criterio
+    for i in range (0, lt.size(list1)):
+        if (lt.getElement(list1, i)['genres'] in normalizeCase(generoBuscado)): #case insensitive
+            lt.addLast(resultList2, (lt.getElement(list1, i)))   #se agrega a la lista resultado
+
+    print ("Las peliculas encontradas son:" )
+    for j in range (lt.size(resultList2)):               #loop para imprimir todos los titulos encontrados con un indice
+        print((j, (lt.getElement(resultList2,j))['original_title'])) 
+    print ("se encontraron" , lt.size(resultList2) , "del genero especificado \n")
+
+#ask for input selection
+    print ("Ingrese su selección de peliculas para el ranking\n puede ingresar numeros (1,2,3) o rangos(1-3)\n separados con una coma")
+    rankingSearchInput=str(input ("Ingrese las peliculas escogidas:\n"))
+
+#turn selection String into number array
+    searchParameters= numberStringtoList(rankingSearchInput)
+#create new array with given indexes
+#no se utiliza el metodo lt.sublist pues este no incluye intervalos
+    
+
+    
+    rankingList= lt.newList()
+
+    
+    for n in range (len(searchParameters)):    
+        lt.addLast(rankingList, (lt.getElement(resultList2,n)))
+        #rankingList.append(resultList[searchParameters[n]])
+    
+    for o in range(lt.size(rankingList)):
+        print(o+1, (lt.getElement(resultList2,o))['original_title'])
+    print('Se seleccionaron ', lt.size(rankingList), ' peliculas')
+
+#ask for sorting criteria1
+    printMenuSortingcriteria()
+    criteriaInput=str(input ("Ingrese el criterio para el ranking:\n"))
+
+
+#ask for sorting order
+    if int (criteriaInput)==1: #vote count
+        searchCriteria = 'vote_count'
+    elif int(criteriaInput)==2: #vote average
+        searchCriteria='vote_average'
+
+
+    #ask for sorting
+    printMenuSortingOrder()
+    orderInput=str(input ("seleccione el orden para el ranking\n"))
+
+    if int (orderInput)==1: #descendente
+        orderedRankingList= rankingList
+        insertion.insertionSortDescending(orderedRankingList, searchCriteria)
+        for n in range(lt.size(orderedRankingList)):
+            print((n+1, orderedRankingList[n]['original_title'], orderedRankingList[n]['vote_count']))
+
+    elif int(orderInput)==2: #vote average
+        searchCriteria='vote_average'#ascendente
+
+
+
+
+
 
 
 def printMenuSortingcriteria():
@@ -221,6 +338,14 @@ def printMenuSortingOrder():
     print ("")
     print("   (1)   Orden descendente ")
     print("   (2)   Orden ascendente ")
+
+
+# metodo basdo en https://stackoverflow.com/questions/6405208/how-to-convert-numeric-string-ranges-to-a-list-in-python
+def numberStringtoList (inputNumbers:str):
+    result= sum(((list(range(*[int(j) + k for k,j in enumerate(i.split('-'))]))
+        if '-' in i else [int(i)]) for i in inputNumbers.split(',')), [])
+    print(result)
+    return result
 
 
 
@@ -273,18 +398,25 @@ def main():
                 pass
 
             elif int(inputs[0])==3: #opcion 3
+                pass
+
+            elif int(inputs[0])==4: #opcion 4
                 director=str(input ("Ingrese el director a buscar:\n"))
                 ConocerTrabajoDirector(lstmovies, lstmovcas, director)
 
-            elif int(inputs[0])==4: #opcion 4
-                pass
 
             elif int(inputs[0])==5: #opcion 5
+                inp=str(input("."))
+                numberStringtoList(inp)
+                
+
+            elif int(inputs)==6: #opcion 6
                 genero=str(input ("Ingrese el genero a buscar:\n"))
                 buscarGeneroADT(lstmovies, genero)
 
-            elif int(inputs[0])==6: #opcion 6
-                pass
+            elif int(inputs[0])==7: #opcion 7
+                genero=str(input ("Ingrese el genero a buscar:\n"))
+                rankingPorGenero(lstmovies, genero)
 
 
             elif int(inputs[0])==0: #opcion 0, salir

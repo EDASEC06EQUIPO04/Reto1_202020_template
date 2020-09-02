@@ -32,3 +32,22 @@ def insertionSort (lst, lessfunction):
             lt.exchange (lst, pos2, pos2-1)
             pos2 -= 1
         pos1 += 1
+
+
+def insertionSortDescending(lst, sortingcriteria):
+    for i in range(1, lt.size(lst)):
+        pos2= i-1
+        while int((lt.getElement(lst,n))[sortingcriteria])>int((lt.getElement(lst,n))[sortingcriteria])and pos2>=0:
+            lt.exchange(lst, pos2, pos2-1)
+            pos2 -=1
+
+
+#def insertionSortVoteCount (lst): 
+    #size =  lt.size(lst) 
+    #pos1 = 1
+    #while pos1 <= size:
+        #pos2 = pos1
+        #while (pos2 >1) and ( int(lt.getElement(lt, pos2))['vote_count'] )< int(lt.getElement(lst['vote_count'], pos2-1))):
+            #lt.exchange (lst, pos2, pos2-1)
+            #pos2 -= 1
+        #pos1 += 1
